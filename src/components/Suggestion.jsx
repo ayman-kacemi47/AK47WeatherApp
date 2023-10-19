@@ -12,10 +12,10 @@ const Suggestion = ({ cityText, positionSuccess }) => {
       )
         .then((response) => response.json())
         .then((data) => {
-          //   console.log('data 22 : ', data);
+          // console.log('data 22 suggestion : ', data);
           setSugg(
             data.results.map((result) => ({
-              city: result.city,
+              city: result.address_line1,
               country: result.country,
               lat: result.lat,
               lon: result.lon,

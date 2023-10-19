@@ -12,6 +12,7 @@ import Suggestion from './components/Suggestion';
 
 function App() {
   const [city, setCity] = useState('');
+  const [cityV2, setCityV2] = useState(''); //so the city don't change when start typing
   const [country, setCountry] = useState('');
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
@@ -55,6 +56,7 @@ function App() {
     } else {
       setData(res);
       setCity(city2);
+      setCityV2(city2);
       setCountry(country2);
 
       //console.log(' city : ', res);
@@ -88,6 +90,7 @@ function App() {
       );
     } else {
       setCity(res.city);
+      setCityV2(res.city);
       setCountry(res.country);
       setData(res);
       setLoading(false);
@@ -141,31 +144,33 @@ function App() {
             position: 'relative',
           }}
         >
-          <input
-            type='text'
-            placeholder='nom du ville en anglais , city name'
-            id='cityInput'
-            required
-            autoComplete='off'
-            onChange={(e) => {
-              setCity(e.target.value);
-            }}
-            onFocus={() => setIsActive(true)}
-            onBlur={handleInputBlur}
-          />
-          <button type='submit' style={{ position: 'relative' }}>
-            <img
-              src={searchLogo}
-              alt='search svg'
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%,-50%) ',
-                width: '20px',
+          <span className='span'>
+            <input
+              type='text'
+              placeholder='nom du ville, city name'
+              id='cityInput'
+              required
+              autoComplete='off'
+              onChange={(e) => {
+                setCity(e.target.value);
               }}
+              onFocus={() => setIsActive(true)}
+              onBlur={handleInputBlur}
             />
-          </button>
+            <button type='submit' style={{ position: 'relative' }}>
+              <img
+                src={searchLogo}
+                alt='search svg'
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%,-50%) ',
+                  width: '20px',
+                }}
+              />
+            </button>
+          </span>
           {city && city.length > 2 && isActive ? (
             <Suggestion cityText={city} positionSuccess={positionSuccess} />
           ) : (
@@ -175,7 +180,7 @@ function App() {
         <div>
           {data && (
             <h1 className='cityAndCountry'>
-              {data.city ? data.city : city} {data.country}
+              {data.city ? data.city : cityV2} {data.country}
             </h1>
           )}
         </div>

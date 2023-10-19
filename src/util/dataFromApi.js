@@ -32,14 +32,14 @@ async function getCoordinates(cityOrCoords) {
       `https://api.timezonedb.com/v2.1/get-time-zone?key=${timezoneKey}&format=json&by=position&lat=${lat}&lng=${long}`
     );
 
-    console.log('res loc', response);
+    // console.log('res loc', response);
     timezone = response.data.zoneName;
     country = response.data.countryName;
     city = response.data.cityName;
   }
 
   const coordinates = { lat, long, timezone, country, city };
-  // console.log('ccor ', coordinates);
+  // console.log('geoCoordina ', coordinates);
 
   return coordinates;
 }
@@ -69,6 +69,14 @@ export default async function fetchData(cityOrCoords) {
       const dailyData = parsedaily(data);
       const hourlyData = parsehourly(data);
 
+      // console.log(
+      //   'fetch data : ',
+      //   city,
+      //   current,
+      //   dailyData,
+      //   hourlyData,
+      //   country
+      // );
       return { city, current, dailyData, hourlyData, country };
     }
   } catch (error) {

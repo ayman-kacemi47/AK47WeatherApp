@@ -41,12 +41,33 @@ body{
   border-radius: 5px 0 0 5px;
   padding-left: 10px;
   vertical-align: 'middle';
+  position: relative;
 }
+
+.span{
+  position: relative;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  margin-bottom: 20px;
+}
+.span::after{
+ content: 'Pays tout seul = La ville au millieu de ce Pays';
+  font-size: 12px;
+  color: #555555bb;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+
 
 
 button {
   vertical-align: 'middle';
-  height: 34px;
+  height: 32px;
   border: none;
   background-color: #4b8df8;
   color: white;
@@ -316,3 +337,7 @@ img:not(.mainSvg img){  /* all SVGs except the current (first one) */
  
 }
 
+
+.App{
+  padding-bottom: 2rem;
+}
