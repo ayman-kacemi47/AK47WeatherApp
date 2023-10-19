@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import fetchData from '../util/dataFromApi';
+
+
 const geoapifyKey = process.env.REACT_APP_GEOAPIFY_KEY;
 
 const Suggestion = ({ cityText, positionSuccess }) => {

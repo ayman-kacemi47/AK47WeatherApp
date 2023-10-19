@@ -39,7 +39,7 @@ body{
   height: 30px;
   border: none;
   border-radius: 5px 0 0 5px;
-  padding-left: 10px;
+  padding: 0px 25px 0 10px;
   vertical-align: 'middle';
   position: relative;
 }
@@ -67,7 +67,7 @@ body{
 
 button {
   vertical-align: 'middle';
-  height: 32px;
+  height: 30px;
   border: none;
   background-color: #4b8df8;
   color: white;
@@ -80,6 +80,12 @@ button:hover {
   background-color: #1a53ff;
 }
 
+.locIncon{
+  position: absolute;
+  top: 36px;
+  transform: translateX(80px);
+
+}
 .CurrentContainer{
   margin: 2rem 0;
   display: flex;

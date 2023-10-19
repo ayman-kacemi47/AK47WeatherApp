@@ -9,6 +9,7 @@ import fetchData from './util/dataFromApi.js';
 import searchLogo from './SVGs/search-svgrepo-com.svg';
 import checkNight from './util/checkNight';
 import Suggestion from './components/Suggestion';
+import locationIcon from './SVGs/locationIcon.svg';
 
 function App() {
   const [city, setCity] = useState('');
@@ -25,6 +26,14 @@ function App() {
 
   const year = new Date();
   //get locations using :
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
+
+    function positionError(error) {
+      console.error('Error getting location: ', error);
+    }
+  }, []);
 
   async function positionSuccess({ coords }) {
     setCoords(coords);
@@ -64,13 +73,6 @@ function App() {
       setLoading(false);
     }
   }
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
-
-    function positionError(error) {
-      console.error('Error getting location: ', error);
-    }
-  }, []);
 
   //In this code, I’ve added a new state variable loading. When you start fetching data, you set loading to true. After the data has been fetched and state has been updated, you set loading to false. In your render method, you check if loading is true. If it is, you display a loading message. If not, you render your Current and DaysWeather components. This ensures that your components are only rendered when the data they depend on is available.
 
@@ -133,6 +135,14 @@ function App() {
     }, 200); // Adjust the delay as needed
   };
 
+  function getLoc() {
+    navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
+
+    function positionError(error) {
+      console.error('Error getting location: ', error);
+    }
+  }
+
   return (
     <div className='App'>
       <div className='search'>
@@ -157,6 +167,7 @@ function App() {
               onFocus={() => setIsActive(true)}
               onBlur={handleInputBlur}
             />
+
             <button type='submit' style={{ position: 'relative' }}>
               <img
                 src={searchLogo}
@@ -177,6 +188,18 @@ function App() {
             ''
           )}
         </form>
+        <button
+          onClick={getLoc}
+          style={{ backgroundColor: 'transparent', border: 'none' }}
+        >
+          <img
+            className='locIncon'
+            src={locationIcon}
+            alt='location icon'
+            style={{ width: '20px' }}
+          />
+        </button>
+
         <div>
           {data && (
             <h1 className='cityAndCountry'>
