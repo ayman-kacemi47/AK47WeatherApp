@@ -1,6 +1,7 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { MY_API_KEY } from './config';
+//import { MY_API_KEY } from './config';
+const MY_API_KEY = process.env.MY_API_KEY;
 
 async function getCoordinates(cityOrCoords) {
   let lat, long, timezone, country, city;
