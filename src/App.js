@@ -8,9 +8,11 @@ import notFound from './SVGs/pageNotFound.png';
 import fetchData from './util/dataFromApi.js';
 import searchLogo from './SVGs/search-svgrepo-com.svg';
 import checkNight from './util/checkNight';
+import Suggestion from './components/Suggestion';
 
 function App() {
-  const [city, setCity] = useState();
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState(null);
@@ -18,38 +20,53 @@ function App() {
   const [zoneTime, setZoneTime] = useState();
   const [Coords, setCoords] = useState();
 
+  const [isActive, setIsActive] = useState(false);
+
   const year = new Date();
   //get locations using :
+
+  async function positionSuccess({ coords }) {
+    setCoords(coords);
+    //console.log('cords ', coords);
+    let data, city2, country2;
+    if (coords.city && coords.country) {
+      data = {
+        lat: coords.latitude,
+        long: coords.longitude,
+        city: coords.city,
+        country: coords.country,
+      };
+      city2 = data.city;
+      country2 = data.country;
+    } else {
+      data = { lat: coords.latitude, long: coords.longitude };
+    }
+    setLoading(true);
+    const res = await fetchData(data);
+    if (res === 'cityNotFound') {
+      setLoading(false);
+      setData(null);
+      setMsg(
+        <div className='notFound'>
+          <h1>Ville non Trouvé !!</h1>
+          <img src={notFound} alt='not found Sad Sun' />
+        </div>
+      );
+    } else {
+      setData(res);
+      setCity(city2);
+      setCountry(country2);
+
+      //console.log(' city : ', res);
+
+      setLoading(false);
+    }
+  }
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(positionSuccess, positionError);
 
     function positionError(error) {
       console.error('Error getting location: ', error);
-    }
-
-    async function positionSuccess({ coords }) {
-      setCoords(coords);
-      console.log('cords ', coords);
-      const data = { lat: coords.latitude, long: coords.longitude };
-      setLoading(true);
-      const res = await fetchData(data);
-      if (res === 'cityNotFound') {
-        setLoading(false);
-        setData(null);
-        setMsg(
-          <div className='notFound'>
-            <h1>Ville non Trouvé !!</h1>
-            <img src={notFound} alt='not found Sad Sun' />
-          </div>
-        );
-      } else {
-        setData(res);
-        setCity(res.city);
-
-        console.log(' city : ', res);
-
-        setLoading(false);
-      }
     }
   }, []);
 
@@ -57,7 +74,7 @@ function App() {
 
   async function handleSubmit(e) {
     e.preventDefault(); // prevent auto submition
-    console.log('city:  ', city);
+    // console.log('city:  ', city);
     setLoading(true);
     const res = await fetchData(city);
     if (res === 'cityNotFound') {
@@ -70,6 +87,8 @@ function App() {
         </div>
       );
     } else {
+      setCity(res.city);
+      setCountry(res.country);
       setData(res);
       setLoading(false);
     }
@@ -105,21 +124,34 @@ function App() {
     }
   }, 100); // Check every 100ms
 
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      setIsActive(false);
+    }, 200); // Adjust the delay as needed
+  };
+
   return (
     <div className='App'>
       <div className='search'>
         <form
           onSubmit={handleSubmit}
-          style={{ display: 'flex', alignItems: 'center' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            position: 'relative',
+          }}
         >
           <input
             type='text'
             placeholder='nom du ville en anglais , city name'
             id='cityInput'
             required
+            autoComplete='off'
             onChange={(e) => {
               setCity(e.target.value);
             }}
+            onFocus={() => setIsActive(true)}
+            onBlur={handleInputBlur}
           />
           <button type='submit' style={{ position: 'relative' }}>
             <img
@@ -134,12 +166,16 @@ function App() {
               }}
             />
           </button>
+          {city && city.length > 2 && isActive ? (
+            <Suggestion cityText={city} positionSuccess={positionSuccess} />
+          ) : (
+            ''
+          )}
         </form>
-
         <div>
           {data && (
             <h1 className='cityAndCountry'>
-              {data.city},{data.country}
+              {data.city ? data.city : city} {data.country}
             </h1>
           )}
         </div>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import moment from 'moment-timezone';
 //import { MY_API_KEY } from './config';
 const MY_API_KEY = process.env.REACT_APP_MY_API_KEY;
+const timezoneKey = process.env.REACT_APP_TIMEZONEDB_KEY;
 
 async function getCoordinates(cityOrCoords) {
   let lat, long, timezone, country, city;
@@ -20,7 +21,7 @@ async function getCoordinates(cityOrCoords) {
     long = response.data.results[0].longitude;
     timezone = response.data.results[0].timezone;
     country = response.data.results[0].country;
-    city = cityOrCoords;
+    city = response.data.results[0].na;
   } else {
     // If cityOrCoords is not a string, treat it as an object with lat and long properties
     lat = cityOrCoords.lat;
@@ -28,17 +29,17 @@ async function getCoordinates(cityOrCoords) {
 
     // Use OpenCage Geocoding API to get the timezone and country from lat and long
     const response = await axios.get(
-      `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${long}&key=${MY_API_KEY}`
+      `http://api.timezonedb.com/v2.1/get-time-zone?key=${timezoneKey}&format=json&by=position&lat=${lat}&lng=${long}`
     );
 
     console.log('res loc', response);
-    timezone = response.data.results[0].annotations.timezone.name;
-    country = response.data.results[0].components.country;
-    city = response.data.results[0].components.suburb;
+    timezone = response.data.zoneName;
+    country = response.data.countryName;
+    city = response.data.cityName;
   }
 
   const coordinates = { lat, long, timezone, country, city };
-  console.log('ccor ', coordinates);
+  // console.log('ccor ', coordinates);
 
   return coordinates;
 }
@@ -77,7 +78,7 @@ export default async function fetchData(cityOrCoords) {
 }
 
 function parseCurrent({ current, daily }, timezone) {
-  console.log(' parse current called ');
+  // console.log(' parse current called ');
   return {
     currentTemp: Math.round(current.temperature_2m),
     highTemp: Math.round(daily.temperature_2m_max[0]),
