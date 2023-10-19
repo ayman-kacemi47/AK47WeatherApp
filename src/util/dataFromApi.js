@@ -29,7 +29,7 @@ async function getCoordinates(cityOrCoords) {
 
     // Use OpenCage Geocoding API to get the timezone and country from lat and long
     const response = await axios.get(
-      `http://api.timezonedb.com/v2.1/get-time-zone?key=${timezoneKey}&format=json&by=position&lat=${lat}&lng=${long}`
+      `https://api.timezonedb.com/v2.1/get-time-zone?key=${timezoneKey}&format=json&by=position&lat=${lat}&lng=${long}`
     );
 
     console.log('res loc', response);
