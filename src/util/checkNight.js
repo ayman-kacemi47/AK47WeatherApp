@@ -8,8 +8,8 @@ export default function checkNight(data) {
   const sunsetTime = moment.unix(data.current.sunset).tz(data.current.timezone);
 
   if (currentTime.isAfter(sunriseTime) && currentTime.isBefore(sunsetTime)) {
-    return { bool: false, currentTime }; // It's daytime
+    return { bool: false, currentTime, sunriseTime, sunsetTime }; // It's daytime
   } else {
-    return { bool: true, currentTime,sunriseTime,sunsetTime }; // It's nighttime
+    return { bool: true, currentTime, sunriseTime, sunsetTime }; // It's nighttime
   }
 }
