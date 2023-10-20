@@ -22,14 +22,16 @@ const Current = ({ data, moon }) => {
 
   const [sunriseTime, setSunriseTime] = useState(null);
   const [sunsetTime, setSunsetTime] = useState(null);
-  const [CurrentTime, setCurrentTime] = useState(null);
+  const [currentTime, setCurrentTime] = useState(moment().tz(timezone));
 
   useEffect(() => {
-    const currentTime = moment().tz(timezone);
+    const interval = setInterval(() => {
+      setCurrentTime(moment().tz(timezone));
+    }, 1000); // Update every second
+
     const sunriseMoment = moment.unix(sunrise).tz(timezone);
     const sunsetMoment = moment.unix(sunset).tz(timezone);
 
-    setCurrentTime(currentTime.format('HH:mm'));
     setSunriseTime(sunriseMoment.format('HH:mm'));
     setSunsetTime(sunsetMoment.format('HH:mm'));
 
@@ -63,6 +65,8 @@ const Current = ({ data, moon }) => {
 
       document.head.appendChild(styleElement);
     }
+
+    return () => clearInterval(interval); // Clear interval on unmount
   }, [data, sunrise, sunset, timezone]);
 
   let currentImgSrc = getIcon(iconCode);
@@ -72,7 +76,7 @@ const Current = ({ data, moon }) => {
 
   return (
     <>
-      <h2 className='CityTime'>{CurrentTime}</h2>
+      <h2 className='CityTime'>{currentTime.format('HH:mm:ss')}</h2>
       <div className='CurrentContainer'>
         <div className='mainSvg'>
           <img

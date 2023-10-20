@@ -6,7 +6,7 @@ import 'moment/locale/fr'; //to use fr days
 function DayCard({ index, time, temp, weathercode }) {
   let day;
   if (index === 0) {
-    day = "Ajourd'hui";
+    day = "Aujourd'hui";
   } else if (index === 1) {
     day = 'Demin';
   } else {
