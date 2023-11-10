@@ -190,10 +190,10 @@ function App() {
         </form>
         <button
           onClick={getLoc}
+          className='locIncon'
           style={{ backgroundColor: 'transparent', border: 'none' }}
         >
           <img
-            className='locIncon'
             src={locationIcon}
             alt='location icon'
             style={{ width: '20px' }}

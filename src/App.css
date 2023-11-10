@@ -82,8 +82,8 @@ button:hover {
 
 .locIncon{
   position: absolute;
-  top: 36px;
-  transform: translateX(80px);
+  top: 34px;
+  transform: translateX(90px);
 
 }
 .CurrentContainer{
